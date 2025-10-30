@@ -1,4 +1,4 @@
-package main
+package api 
 
 import (
 	"log"
@@ -6,31 +6,31 @@ import (
 	"time"
 )
 
-type application struct{
-	config config
+type Application struct{
+	Config Config
 }
 
-type config struct{
-	addr string
+type Config struct{
+	Addr string
 }	
 
-func (app *application) mount() *http.ServeMux {
+func (app *Application) Mount() *http.ServeMux {
 	router := http.NewServeMux()
 
 	router.HandleFunc("GET /health", app.healthCheckHandler)
 	return router
 }
 
-func (app *application) run(mux *http.ServeMux) error {
+func (app *Application) Run(mux *http.ServeMux) error {
 	srv := &http.Server{
-		Addr: app.config.addr,
+		Addr: app.Config.Addr,
 		Handler: mux,
 		WriteTimeout: time.Second * 30,
 		ReadTimeout: time.Second * 10,
 		IdleTimeout: time.Minute,
 	}
 
-	log.Printf("server has started at %s", app.config.addr) 
+	log.Printf("server has started at %s", app.Config.Addr) 
 
 	return srv.ListenAndServe()
 }
