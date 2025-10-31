@@ -5,19 +5,19 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/chetanjangir0/oneresumeplease/internal/middleware"
 	"github.com/chetanjangir0/oneresumeplease/internal/handler"
+	"github.com/chetanjangir0/oneresumeplease/internal/middleware"
 )
 
-type Application struct{
+type Application struct {
 	Config Config
 }
 
-type Config struct{
+type Config struct {
 	Addr string
-}	
+}
 
-func (app *Application) Mount() http.Handler{
+func (app *Application) Mount() http.Handler {
 	router := http.NewServeMux()
 
 	router.HandleFunc("GET /health", handler.HealthCheck)
@@ -25,21 +25,23 @@ func (app *Application) Mount() http.Handler{
 	// global middewares
 	stack := middleware.CreateStack(
 		middleware.Logger,
+		middleware.Recover,
+		middleware.CORS,
 	)
-	
-	return stack(router) 
+
+	return stack(router)
 }
 
 func (app *Application) Run(router http.Handler) error {
 	srv := &http.Server{
-		Addr: app.Config.Addr,
-		Handler: router,
+		Addr:         app.Config.Addr,
+		Handler:      router,
 		WriteTimeout: time.Second * 30,
-		ReadTimeout: time.Second * 10,
-		IdleTimeout: time.Minute,
+		ReadTimeout:  time.Second * 10,
+		IdleTimeout:  time.Minute,
 	}
 
-	log.Printf("server has started at %s", app.Config.Addr) 
+	log.Printf("server has started at %s", app.Config.Addr)
 
 	return srv.ListenAndServe()
 }

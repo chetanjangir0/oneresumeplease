@@ -1,12 +1,14 @@
 package main
 
 import (
-	"log"
 	"github.com/chetanjangir0/oneresumeplease/internal/api"
+	"log"
 )
 
-func main(){
-	cfg:= api.Config{
+func main() {
+
+	// TODO: use env variables
+	cfg := api.Config{
 		Addr: ":8080",
 	}
 
