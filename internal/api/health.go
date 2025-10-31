@@ -2,6 +2,6 @@ package api
 
 import "net/http"
 
-func (app *Application) healthCheckHandler(w http.ResponseWriter, r *http.Request){
+func (app *Application) HealthCheckHandler(w http.ResponseWriter, r *http.Request){
 	w.Write([]byte("Ok"))
 }
