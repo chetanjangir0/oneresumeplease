@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/chetanjangir0/oneresumeplease/internal/middleware"
+	"github.com/chetanjangir0/oneresumeplease/internal/handler"
 )
 
 type Application struct{
@@ -19,7 +20,7 @@ type Config struct{
 func (app *Application) Mount() http.Handler{
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /health", app.HealthCheckHandler)
+	router.HandleFunc("GET /health", handler.HealthCheck)
 
 	// global middewares
 	stack := middleware.CreateStack(
